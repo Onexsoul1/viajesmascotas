@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  microservicio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - spring.datasource.url=jdbc:oracle:thin:@jz2d47ckfsrl0463_high?TNS_ADMIN=/app/oracle_wallet/
+      - spring.datasource.username=ADMIN
+      - spring.datasource.password=Rodrigo*1234
+      - spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+      - spring.jpa.hibernate.ddl-auto=none
+    restart: always

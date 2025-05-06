@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import java.util.List;
 
 @RestController
@@ -26,8 +27,15 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public Usuario obtenerPorId(@PathVariable int id) {
-        return usuarioRepository.findById(id).orElse(null);
+    public ResponseEntity<?> obtenerPorId(@PathVariable int id) {
+        return usuarioRepository.findById(id)
+            .map(usuario -> {
+                EntityModel<Usuario> model = EntityModel.of(usuario);
+                model.add(linkTo(methodOn(UsuarioController.class).obtenerPorId(id)).withSelfRel());
+                model.add(linkTo(methodOn(UsuarioController.class).obtenerTodos()).withRel("todos-usuarios"));
+                return ResponseEntity.ok(model);
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/login")
