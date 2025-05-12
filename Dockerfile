@@ -11,7 +11,7 @@ COPY target/microservicio-usuarios-0.0.1-SNAPSHOT.jar app.jar
 COPY Wallet_JZ2D47CKFSRL0463 /app/oracle_wallet/
 
 # Expone el puerto por donde se comunicará tu app (8080 por defecto en Spring Boot)
-EXPOSE 8081
+EXPOSE 8080
 
 # Comando para ejecutar la app dentro del contenedor
 CMD ["java", "-jar", "app.jar"]

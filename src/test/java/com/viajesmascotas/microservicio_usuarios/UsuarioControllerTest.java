@@ -46,4 +46,23 @@ public class UsuarioControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Login exitoso"));
     }
+    @Test
+    void deberiaRetornarNotFoundSiUsuarioNoExiste() throws Exception {
+        Mockito.when(usuariosRepository.findById(999)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/usuarios/999"))
+                .andExpect(status().isNotFound());
+    }
+    @Test
+    void deberiaRetornarUnauthorizedSiLoginFalla() throws Exception {
+        Mockito.when(usuariosRepository.findByCorreoAndClave("falso@correo.com", "wrong"))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/usuarios/login")
+                .param("correo", "falso@correo.com")
+                .param("clave", "wrong"))
+                .andExpect(status().isUnauthorized());
+    }
+
+
 }

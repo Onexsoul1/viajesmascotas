@@ -39,10 +39,12 @@ public class UsuarioController {
     }
 
     @GetMapping("/login")
-    public String login(@RequestParam String correo, @RequestParam String clave) {
-        return usuarioRepository.findByCorreoAndClave(correo, clave).isPresent()
-            ? "Login exitoso"
-            : "Credenciales inválidas";
+    public ResponseEntity<String> login(@RequestParam String correo, @RequestParam String clave) {
+        if (usuarioRepository.findByCorreoAndClave(correo, clave).isPresent()) {
+            return ResponseEntity.ok("Login exitoso");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+        }
     }
 
     @PostMapping
